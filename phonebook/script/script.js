@@ -1,58 +1,77 @@
-'use strict';
+"use strict";
 const data = [
   {
-    name: 'Иван',
-    surname: 'Петров',
-    phone: '+79514545454',
+    name: "Иван",
+    surname: "Петров",
+    phone: "+79514545454",
   },
   {
-    name: 'Игорь',
-    surname: 'Семёнов',
-    phone: '+79999999999',
+    name: "Игорь",
+    surname: "Семёнов",
+    phone: "+79999999999",
   },
   {
-    name: 'Семён',
-    surname: 'Иванов',
-    phone: '+79800252525',
+    name: "Семён",
+    surname: "Иванов",
+    phone: "+79800252525",
   },
   {
-    name: 'Мария',
-    surname: 'Попова',
-    phone: '+79876543210',
+    name: "Мария",
+    surname: "Попова",
+    phone: "+79876543210",
   },
 ];
 
 
-{
-	const addContactData = (contact) => {
-		data.push(contact);
-		console.log('data:', data);
-	};
+function getStorage(key) {
+  return JSON.parse(localStorage.getItem(key)) || [];
+}
 
+function setStorage(key, value) {
+  let newArray = [...getStorage(key), value];
+  localStorage.setItem(key, JSON.stringify(newArray));
+}
+
+function removeStorage(key, phoneNumber) {
+  let prevArray = getStorage(key);
+  prevArray = prevArray.filter((item) => item.phone !== phoneNumber);
+  localStorage.setItem(key, JSON.stringify(prevArray));
+}
+
+// const serialData = JSON.stringify(data);
+// localStorage.setItem("myLocal", serialData);
+// const returnData = JSON.parse(localStorage.getItem("myLocal"));
+// console.log(returnData);
+
+{
+  const addContactData = (contact) => {
+    data.push(contact);
+    console.log("data:", data);
+  };
 
   const createContainer = () => {
-    const container = document.createElement('div');
-    container.classList.add('container');
+    const container = document.createElement("div");
+    container.classList.add("container");
     return container;
   };
 
   const createHeader = () => {
-    const header = document.createElement('header');
-    header.classList.add('header');
+    const header = document.createElement("header");
+    header.classList.add("header");
     const headerContainer = createContainer();
     header.append(headerContainer);
     header.headerContainer = headerContainer;
     return header;
   };
-  const createLogo = title => {
-    const h1 = document.createElement('h1');
-    h1.classList.add('logo');
+  const createLogo = (title) => {
+    const h1 = document.createElement("h1");
+    h1.classList.add("logo");
     h1.textContent = `Телефонный справочник. ${title}`;
 
     return h1;
   };
   const createMain = () => {
-    const main = document.createElement('main');
+    const main = document.createElement("main");
 
     const mainContainer = createContainer();
     main.append(mainContainer);
@@ -60,12 +79,12 @@ const data = [
     return main;
   };
 
-  const createButtonsGroup = params => {
-    const btnWrapper = document.createElement('div');
-    btnWrapper.classList.add('btn-wrapper');
+  const createButtonsGroup = (params) => {
+    const btnWrapper = document.createElement("div");
+    btnWrapper.classList.add("btn-wrapper");
 
-    const btns = params.map(({className, type, text}) => {
-		  const button = document.createElement('button');
+    const btns = params.map(({ className, type, text }) => {
+      const button = document.createElement("button");
       button.type = type;
       button.textContent = text;
       button.className = className;
@@ -79,35 +98,39 @@ const data = [
     };
   };
   const createTable = () => {
-    const table = document.createElement('table');
-    table.classList.add('table', 'table-striped');
-    const thead = document.createElement('thead');
-    thead.insertAdjacentHTML('beforeend', `
+    const table = document.createElement("table");
+    table.classList.add("table", "table-striped");
+    const thead = document.createElement("thead");
+    thead.insertAdjacentHTML(
+      "beforeend",
+      `
 			<tr>
 				<th class="delete">Удалить</th>
 				<th>Имя</th>
 				<th>Фамилия</th>
 				<th>Телефон</th>
 			</tr>
-		`);
+		`
+    );
 
-    const tbody = document.createElement('tbody');
+    const tbody = document.createElement("tbody");
 
     table.append(thead, tbody);
 
     table.tbody = tbody;
 
-
     return table;
   };
 
   const createForm = () => {
-    const overlay = document.createElement('div');
-    overlay.classList.add('form-overlay');
+    const overlay = document.createElement("div");
+    overlay.classList.add("form-overlay");
 
-    const form = document.createElement('form');
-    form.classList.add('form');
-    form.insertAdjacentHTML('beforeend', `
+    const form = document.createElement("form");
+    form.classList.add("form");
+    form.insertAdjacentHTML(
+      "beforeend",
+      `
 		<button class ="close" type="button"></button>
 		<h2 class="form-title">Добавить контакт</h2>
 		<div class="form-group">
@@ -122,17 +145,18 @@ const data = [
 		<label class="form-label" for="phone">Телефон:</label>
 		<input class="form-input" name="phone" id="phone" type="number" required>
 		</div>
-		`);
+		`
+    );
     const buttonGroup = createButtonsGroup([
       {
-        className: 'btn btn-primary mr-3 js-add',
-        type: 'submit',
-        text: 'Добавить',
+        className: "btn btn-primary mr-3 js-add",
+        type: "submit",
+        text: "Добавить",
       },
       {
-        className: 'btn btn-danger',
-        type: 'reset',
-        text: 'Отмена',
+        className: "btn btn-danger",
+        type: "reset",
+        text: "Отмена",
       },
     ]);
     form.append(...buttonGroup.btns);
@@ -145,8 +169,8 @@ const data = [
   };
 
   const createFooter = () => {
-    const footer = document.createElement('footer');
-    footer.classList.add('footer');
+    const footer = document.createElement("footer");
+    footer.classList.add("footer");
 
     const footerContainer = createContainer();
     footer.append(footerContainer);
@@ -154,13 +178,12 @@ const data = [
     return footer;
   };
 
-  const createCopyright = title => {
-    const parag = document.createElement('p');
+  const createCopyright = (title) => {
+    const parag = document.createElement("p");
     parag.textContent = `Все права защищены ©${title}`;
 
     return parag;
   };
-
 
   const renderPhoneBook = (app, title) => {
     const header = createHeader();
@@ -168,18 +191,18 @@ const data = [
     const main = createMain();
     const buttonGroup = createButtonsGroup([
       {
-        className: 'btn btn-primary mr-3',
-        type: 'button',
-        text: 'Добавить',
+        className: "btn btn-primary mr-3",
+        type: "button",
+        text: "Добавить",
       },
       {
-        className: 'btn btn-danger',
-        type: 'button',
-        text: 'Удалить',
+        className: "btn btn-danger",
+        type: "button",
+        text: "Удалить",
       },
     ]);
     const table = createTable();
-    const {form, overlay} = createForm();
+    const { form, overlay } = createForm();
     const footer = createFooter();
     const copyright = createCopyright(title);
     footer.append(copyright);
@@ -193,28 +216,27 @@ const data = [
       btnAdd: buttonGroup.btns[0],
       btnDel: buttonGroup.btns[1],
       formOverlay: overlay,
-		  form,
+      form,
     };
   };
 
-  const createRow = ({name: firstName, surname, phone}) => {
-    const tr = document.createElement('tr');
-    tr.classList.add('contact');
+  const createRow = ({ name: firstName, surname, phone }) => {
+    const tr = document.createElement("tr");
+    tr.classList.add("contact");
 
-    const tdDel = document.createElement('td');
-    tdDel.classList.add('delete');
-    const buttonDel = document.createElement('button');
+    const tdDel = document.createElement("td");
+    tdDel.classList.add("delete");
+    const buttonDel = document.createElement("button");
 
-    buttonDel.classList.add('del-icon');
+    buttonDel.classList.add("del-icon");
     tdDel.append(buttonDel);
 
-
-    const tdName = document.createElement('td');
+    const tdName = document.createElement("td");
     tdName.textContent = firstName;
-    const tdSurname = document.createElement('td');
+    const tdSurname = document.createElement("td");
     tdSurname.textContent = surname;
-    const tdPhone = document.createElement('td');
-    const phoneLink = document.createElement('a');
+    const tdPhone = document.createElement("td");
+    const phoneLink = document.createElement("a");
     phoneLink.href = `tel:${phone}`;
     phoneLink.textContent = phone;
     tr.phoneLink = phoneLink;
@@ -222,7 +244,6 @@ const data = [
     tdPhone.append(phoneLink);
 
     tr.append(tdDel, tdName, tdSurname, tdPhone);
-
 
     return tr;
   };
@@ -234,11 +255,11 @@ const data = [
   };
   const hoverRow = (allRow, logo) => {
     const text = logo.textContent;
-    allRow.forEach(contact => {
-      contact.addEventListener('mouseenter', () => {
+    allRow.forEach((contact) => {
+      contact.addEventListener("mouseenter", () => {
         logo.textContent = contact.phoneLink.textContent;
       });
-      contact.addEventListener('mouseleave', () => {
+      contact.addEventListener("mouseleave", () => {
         logo.textContent = text;
       });
     });
@@ -246,83 +267,81 @@ const data = [
 
   const modalControl = (btnAdd, formOverlay) => {
     const openModal = () => {
-      formOverlay.classList.add('is-visible');
+      formOverlay.classList.add("is-visible");
     };
 
     const closeModal = () => {
-      formOverlay.classList.remove('is-visible');
+      formOverlay.classList.remove("is-visible");
     };
 
-
-    btnAdd.addEventListener('click', () => {
+    btnAdd.addEventListener("click", () => {
       openModal();
     });
 
-    formOverlay.addEventListener('click', (e) => {
+    formOverlay.addEventListener("click", (e) => {
       const target = e.target;
-      if (target === formOverlay ||
-				target.closest('.close')) {
+      if (target === formOverlay || target.closest(".close")) {
         closeModal();
       }
     });
 
-		return {
-			closeModal,
-		};
-
-
+    return {
+      closeModal,
+    };
   };
 
   const deleteControl = (btnDel, list) => {
-    btnDel.addEventListener('click', () => {
-      document.querySelectorAll('.delete').forEach(del => {
-        del.classList.toggle('is-visible');
+    btnDel.addEventListener("click", () => {
+      document.querySelectorAll(".delete").forEach((del) => {
+        del.classList.toggle("is-visible");
       });
     });
 
-    list.addEventListener('click', e => {
+    list.addEventListener("click", (e) => {
       const target = e.target;
-      if (e.target.closest('.del-icon')) {
-        target.closest('.contact').remove();
+      if (e.target.closest(".del-icon")) {
+        target.closest(".contact").remove();
+        let phoneDeleted = target
+          .closest(".contact")
+          .querySelector("a").innerHTML;
+        removeStorage("phoneData", phoneDeleted);
       }
     });
   };
 
-	const addContactPage = (contact, list) => {
-		list.append(createRow(contact));
-	};
-
-
-  const formControl = (form, list, closeModal) => {
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-			const formData = new FormData(e.target);
-			const newContact = Object.fromEntries(formData);
-			console.log('newContact: ', newContact);
-			addContactPage(newContact, list);
-			addContactData(newContact);
-      form.reset();
-			closeModal();
-    });
+  const addContactPage = (contact, list) => {
+    list.append(createRow(contact));
   };
 
+  const formControl = (form, list, closeModal) => {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const newContact = Object.fromEntries(formData);
+
+      console.log("newContact: ", newContact);
+      addContactPage(newContact, list);
+      addContactData(newContact);
+      setStorage("phoneData", newContact);
+      form.reset();
+      closeModal();
+    });
+  };
 
   const init = (selectorApp, title) => {
     const app = document.querySelector(selectorApp);
 
-    const {
-      list,
-      logo,
-      btnAdd,
-      formOverlay,
-      form,
-      btnDel,
-    } = renderPhoneBook(app, title);
+    const { list, logo, btnAdd, formOverlay, form, btnDel } = renderPhoneBook(
+      app,
+      title
+    );
 
-    const allRow = renderContacts(list, data);
-		const {closeModal} = modalControl(btnAdd, formOverlay);
+    const phoneDataFromLS = getStorage("phoneData");
+    const allRow = renderContacts(list, phoneDataFromLS);
+
+    const { closeModal } = modalControl(btnAdd, formOverlay);
     hoverRow(allRow, logo);
-   
+
     deleteControl(btnDel, list);
     formControl(form, list, closeModal);
   };
